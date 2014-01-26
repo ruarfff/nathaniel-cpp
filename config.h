@@ -19,6 +19,9 @@
 /* Define to 1 if you have the `SDL' library (-lSDL). */
 #define HAVE_LIBSDL 1
 
+/* Define to 1 if you have the `SDL_image' library (-lSDL_image). */
+#define HAVE_LIBSDL_IMAGE 1
+
 /* Define to 1 if you have the <memory.h> header file. */
 #define HAVE_MEMORY_H 1
 
