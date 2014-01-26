@@ -1475,8 +1475,6 @@ fi
 
 } # ac_fn_c_try_compile
 
-<<<<<<< HEAD
-=======
 # ac_fn_c_try_link LINENO
 # -----------------------
 # Try to link conftest.$ac_ext, and return whether this succeeded.
@@ -1523,7 +1521,6 @@ fi
 
 } # ac_fn_c_try_link
 
->>>>>>> 79759fe0a6425a8a41674199c62bb2c9b6bd2a94
 # ac_fn_c_try_cpp LINENO
 # ----------------------
 # Try to preprocess conftest.$ac_ext, and return whether this succeeded.
@@ -3685,9 +3682,6 @@ fi
 
 
 # Checks for libraries.
-AX_HAVE_OPENGL
-
-# Checks for header files.
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for glPushMatrix in -lGL" >&5
 $as_echo_n "checking for glPushMatrix in -lGL... " >&6; }
