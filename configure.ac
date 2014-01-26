@@ -13,7 +13,10 @@ AC_CONFIG_HEADERS([config.h])
 AC_PROG_CC
 
 # Checks for libraries.
-AX_HAVE_OPENGL
+AC_CHECK_LIB([GL], [glPushMatrix])
+AC_CHECK_LIB([GLU], [gluLookAt])
+AC_CHECK_LIB([glut], [glutPostRedisplay])
+AC_CHECK_LIB([m], [pow])
 
 # Checks for header files.
 AC_CHECK_HEADERS([stdlib.h])
