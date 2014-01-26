@@ -90,7 +90,7 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-dist_VR_OBJECTS = VR.$(OBJEXT)
+dist_VR_OBJECTS = VR.$(OBJEXT) main.$(OBJEXT)
 VR_OBJECTS = $(dist_VR_OBJECTS)
 VR_LDADD = $(LDADD)
 AM_V_P = $(am__v_P_$(V))
@@ -121,6 +121,19 @@ AM_V_CCLD = $(am__v_CCLD_$(V))
 am__v_CCLD_ = $(am__v_CCLD_$(AM_DEFAULT_VERBOSITY))
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
+CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
+	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
+AM_V_CXX = $(am__v_CXX_$(V))
+am__v_CXX_ = $(am__v_CXX_$(AM_DEFAULT_VERBOSITY))
+am__v_CXX_0 = @echo "  CXX     " $@;
+am__v_CXX_1 = 
+CXXLD = $(CXX)
+CXXLINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) \
+	-o $@
+AM_V_CXXLD = $(am__v_CXXLD_$(V))
+am__v_CXXLD_ = $(am__v_CXXLD_$(AM_DEFAULT_VERBOSITY))
+am__v_CXXLD_0 = @echo "  CXXLD   " $@;
+am__v_CXXLD_1 = 
 SOURCES = $(dist_VR_SOURCES)
 DIST_SOURCES = $(dist_VR_SOURCES)
 am__can_run_installinfo = \
@@ -160,6 +173,9 @@ CCDEPMODE = depmode=gcc3
 CFLAGS = -g -O2
 CPP = gcc -E
 CPPFLAGS = 
+CXX = g++
+CXXDEPMODE = depmode=gcc3
+CXXFLAGS = -g -O2
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
@@ -176,7 +192,7 @@ INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
 LDFLAGS = 
 LIBOBJS = 
-LIBS = -lm -lglut -lGLU -lGL 
+LIBS = -lm -lglut -lGLU -lGL -lSDL 
 LTLIBOBJS = 
 MAKEINFO = ${SHELL} /home/ruairi/Dev/nathaniel/missing makeinfo
 MKDIR_P = /bin/mkdir -p
@@ -198,6 +214,7 @@ abs_srcdir = /home/ruairi/Dev/nathaniel/src
 abs_top_builddir = /home/ruairi/Dev/nathaniel
 abs_top_srcdir = /home/ruairi/Dev/nathaniel
 ac_ct_CC = gcc
+ac_ct_CXX = g++
 am__include = include
 am__leading_dot = .
 am__quote = 
@@ -235,11 +252,11 @@ target_alias =
 top_build_prefix = ../
 top_builddir = ..
 top_srcdir = ..
-dist_VR_SOURCES = VR.c
+dist_VR_SOURCES = VR.c main.cc
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .c .o .obj
+.SUFFIXES: .c .cc .o .obj
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -315,7 +332,7 @@ clean-binPROGRAMS:
 
 VR$(EXEEXT): $(VR_OBJECTS) $(VR_DEPENDENCIES) $(EXTRA_VR_DEPENDENCIES) 
 	@rm -f VR$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(VR_OBJECTS) $(VR_LDADD) $(LIBS)
+	$(AM_V_CXXLD)$(CXXLINK) $(VR_OBJECTS) $(VR_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -324,6 +341,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 include ./$(DEPDIR)/VR.Po
+include ./$(DEPDIR)/main.Po
 
 .c.o:
 	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -338,6 +356,20 @@ include ./$(DEPDIR)/VR.Po
 #	$(AM_V_CC)source='$<' object='$@' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
 #	$(AM_V_CC_no)$(COMPILE) -c `$(CYGPATH_W) '$<'`
+
+.cc.o:
+	$(AM_V_CXX)$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
+	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+#	$(AM_V_CXX)source='$<' object='$@' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXXCOMPILE) -c -o $@ $<
+
+.cc.obj:
+	$(AM_V_CXX)$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+#	$(AM_V_CXX)source='$<' object='$@' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 
 ID: $(am__tagged_files)
 	$(am__define_uniq_tagged_files); mkid -fID $$unique

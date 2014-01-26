@@ -1,2 +1,2 @@
-bin_PROGRAMS = VR
-dist_VR_SOURCES = VR.c main.cc
+bin_PROGRAMS = nathaniel
+dist_nathaniel_SOURCES = nathaniel.cc

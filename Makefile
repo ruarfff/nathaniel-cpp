@@ -200,6 +200,9 @@ CCDEPMODE = depmode=gcc3
 CFLAGS = -g -O2
 CPP = gcc -E
 CPPFLAGS = 
+CXX = g++
+CXXDEPMODE = depmode=gcc3
+CXXFLAGS = -g -O2
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
@@ -216,7 +219,7 @@ INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
 LDFLAGS = 
 LIBOBJS = 
-LIBS = -lm -lglut -lGLU -lGL 
+LIBS = -lm -lglut -lGLU -lGL -lSDL 
 LTLIBOBJS = 
 MAKEINFO = ${SHELL} /home/ruairi/Dev/nathaniel/missing makeinfo
 MKDIR_P = /bin/mkdir -p
@@ -238,6 +241,7 @@ abs_srcdir = /home/ruairi/Dev/nathaniel
 abs_top_builddir = /home/ruairi/Dev/nathaniel
 abs_top_srcdir = /home/ruairi/Dev/nathaniel
 ac_ct_CC = gcc
+ac_ct_CXX = g++
 am__include = include
 am__leading_dot = .
 am__quote = 

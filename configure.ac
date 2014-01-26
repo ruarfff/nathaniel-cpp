@@ -6,7 +6,7 @@ AC_INIT([Nathaniel], [1.0], [ruairitobrien@gmail.com])
 
 AM_INIT_AUTOMAKE([foreign])
 
-AC_CONFIG_SRCDIR([src/VR.c])
+AC_CONFIG_SRCDIR([src])
 AC_CONFIG_HEADERS([config.h])
 
 # Checks for programs.
