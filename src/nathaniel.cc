@@ -3,6 +3,8 @@
 #include "SDL/SDL_ttf.h"
 #include <string>
 
+#include "button.h"
+
 #define CONTENT_DIR "../content"
 
 //Screen attributes 
@@ -19,6 +21,8 @@ SDL_Surface *rightMessage = NULL;
 SDL_Surface *message = NULL;
 SDL_Surface *screen = NULL;
 
+SDL_Surface *buttonSheet = NULL;
+
 //The event structure
 SDL_Event event;
 
@@ -27,6 +31,9 @@ TTF_Font *font = NULL;
 
 //The color of the font
 SDL_Color textColor = { 255, 255, 255 };
+
+//Make the button
+Button mainButton( 170, 120, 320, 240 );
 
 SDL_Surface *load_image( std::string filename )
 {
@@ -97,7 +104,7 @@ bool init()
     }
 
     //Set the window caption
-    SDL_WM_SetCaption( "Press an Arrow Key", NULL );
+    SDL_WM_SetCaption( "Nathaniel", NULL );
 
     //If everything initialized fine
     return true;
@@ -107,6 +114,7 @@ bool load_files()
 {
     //Load the background image
     background = load_image( CONTENT_DIR"/test.bmp" );
+    buttonSheet = load_image( CONTENT_DIR"/button.png" );
 
     //Open the font
     font = TTF_OpenFont( CONTENT_DIR"/fonts/lazy.ttf", 72 );
@@ -119,6 +127,12 @@ bool load_files()
 
     //If there was an error in loading the font
     if( font == NULL )
+    {
+        return false;
+    }
+    
+    //If there was a problem in loading the button sprite sheet
+    if( buttonSheet == NULL )
     {
         return false;
     }
@@ -135,6 +149,7 @@ void clean_up()
     SDL_FreeSurface( downMessage );
     SDL_FreeSurface( leftMessage );
     SDL_FreeSurface( rightMessage );
+    SDL_FreeSurface( buttonSheet );
 
     //Close the font
     TTF_CloseFont( font );
@@ -171,6 +186,9 @@ int main( int argc, char* args[] )
 
     //Apply the background
     apply_surface( 0, 0, background, screen );
+    
+    //Clip the sprite sheet
+    mainButton.set_clips();    
 
     //While the user hasn't quit
     while( quit == false )
@@ -178,6 +196,7 @@ int main( int argc, char* args[] )
         //If there's an event to handle
         if( SDL_PollEvent( &event ) )
         {
+			mainButton.handle_events(event);
             //If a key was pressed
             if( event.type == SDL_KEYDOWN )
             {
@@ -206,12 +225,17 @@ int main( int argc, char* args[] )
             apply_surface( 0, 0, background, screen );
 
             //Apply the message centered on the screen
-            apply_surface( ( SCREEN_WIDTH - message->w ) / 2, ( SCREEN_HEIGHT - message->h ) / 2, message, screen );
+            apply_surface( ( SCREEN_WIDTH - message->w ) / 2, ( SCREEN_HEIGHT - message->h ) / 6, message, screen );
 
             //Null the surface pointer
             message = NULL;
         }
-
+        
+        //Fill the screen white
+      //  SDL_FillRect( screen, &screen->clip_rect, SDL_MapRGB( screen->format, 0xFF, 0xFF, 0xFF ) );
+		// Draw Button
+		apply_surface( mainButton.box.x, mainButton.box.y, buttonSheet, screen, mainButton.clip );
+		
         //Update the screen
         if( SDL_Flip( screen ) == -1 )
         {

@@ -90,7 +90,7 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-dist_nathaniel_OBJECTS = nathaniel.$(OBJEXT)
+dist_nathaniel_OBJECTS = nathaniel.$(OBJEXT) button.$(OBJEXT)
 nathaniel_OBJECTS = $(dist_nathaniel_OBJECTS)
 nathaniel_LDADD = $(LDADD)
 AM_V_P = $(am__v_P_$(V))
@@ -240,7 +240,7 @@ target_alias =
 top_build_prefix = ../
 top_builddir = ..
 top_srcdir = ..
-dist_nathaniel_SOURCES = nathaniel.cc
+dist_nathaniel_SOURCES = nathaniel.cc button.cc
 all: all-am
 
 .SUFFIXES:
@@ -328,6 +328,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+include ./$(DEPDIR)/button.Po
 include ./$(DEPDIR)/nathaniel.Po
 
 .cc.o:
