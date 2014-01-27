@@ -16,6 +16,7 @@ AC_PROG_CXX
 # Checks for libraries.
 AC_CHECK_LIB([SDL], [SDL_SetVideoMode])
 AC_CHECK_LIB([SDL_image], [IMG_Load])
+AC_CHECK_LIB([SDL_ttf], [TTF_RenderText_Solid])
 AC_CHECK_LIB([GL], [glPushMatrix])
 AC_CHECK_LIB([GLU], [gluLookAt])
 AC_CHECK_LIB([glut], [glutPostRedisplay])
