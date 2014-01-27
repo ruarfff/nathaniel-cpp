@@ -39,3 +39,6 @@ libtool
 *.gcda
 app.info
 coverage_report
+
+# the executable
+nathaniel
