@@ -32,7 +32,7 @@ GIT_REVISION
 SVN_REVISION
 libtool
 *.so*
-.deps
+.deps/
 *.tar*
 *.zip
 *.gcno
