@@ -30,6 +30,7 @@ AC_CHECK_HEADER_STDBOOL
 
 # Checks for library functions.
 AC_CONFIG_FILES([Makefile
+                 content/Makefile
                  src/Makefile])
 
 AC_OUTPUT

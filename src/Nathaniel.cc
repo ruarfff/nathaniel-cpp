@@ -5,8 +5,6 @@
 
 #include "button.h"
 
-#define CONTENT_DIR "../content"
-
 //Screen attributes 
 const int SCREEN_WIDTH = 640; 
 const int SCREEN_HEIGHT = 480; 
@@ -113,11 +111,11 @@ bool init()
 bool load_files()
 {
     //Load the background image
-    background = load_image( CONTENT_DIR"/test.bmp" );
-    buttonSheet = load_image( CONTENT_DIR"/button.png" );
+    background = load_image( DATADIR "/test.bmp" );
+    buttonSheet = load_image( DATADIR "/button.png" );
 
     //Open the font
-    font = TTF_OpenFont( CONTENT_DIR"/fonts/lazy.ttf", 72 );
+    font = TTF_OpenFont( DATADIR "/lazy.ttf", 72 );
 
     //If there was a problem in loading the background
     if( background == NULL )
