@@ -1,4 +1,4 @@
 bin_PROGRAMS = nathaniel
-dist_nathaniel_SOURCES = nathaniel.cc button.cc
+dist_nathaniel_SOURCES = Nathaniel.cc input/Button.cc
 
-AM_CPPFLAGS = -DDATADIR=\"$(DESTDIR)$(pkgdatadir)\"
+AM_CPPFLAGS = -DDATADIR=\"$(DESTDIR)$(pkgdatadir)\" -I/input

@@ -3,7 +3,7 @@
 #include "SDL/SDL_ttf.h"
 #include <string>
 
-#include "button.h"
+#include "input/Button.h"
 
 //Screen attributes 
 const int SCREEN_WIDTH = 640; 
