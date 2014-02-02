@@ -4,6 +4,7 @@
 #include <string>
 
 #include "input/Button.h"
+#include "game/GameCharacter.h"
 
 //Screen attributes 
 const int SCREEN_WIDTH = 640; 
