@@ -33,6 +33,7 @@ SVN_REVISION
 libtool
 *.so*
 .deps/
+.dirstamp
 *.tar*
 *.zip
 *.gcno

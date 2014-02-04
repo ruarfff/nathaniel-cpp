@@ -1,26 +1,32 @@
-#include "SDL/SDL.h"
-#include "SDL/SDL_image.h"
-#include "SDL/SDL_ttf.h"
+#include <iostream>
 #include <string>
 
-#include "input/Button.h"
-#include "game/GameCharacter.h"
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
+
+#include "Button.h"
+#include "GameCharacter.h"
+
+using namespace std;
 
 //Screen attributes 
-const int SCREEN_WIDTH = 640; 
-const int SCREEN_HEIGHT = 480; 
-const int SCREEN_BPP = 32; 
+const int SCREEN_WIDTH = 1280;
+const int SCREEN_HEIGHT = 720;
 
-//The surfaces
-SDL_Surface *background = NULL;
-SDL_Surface *upMessage = NULL;
-SDL_Surface *downMessage = NULL;
-SDL_Surface *leftMessage = NULL;
-SDL_Surface *rightMessage = NULL;
-SDL_Surface *message = NULL;
-SDL_Surface *screen = NULL;
+//Window and renderer
+SDL_Window *screen = NULL;
+SDL_Renderer *renderer = NULL;
 
-SDL_Surface *buttonSheet = NULL;
+//The textures
+SDL_Texture *background = NULL;
+SDL_Texture *upMessage = NULL;
+SDL_Texture *downMessage = NULL;
+SDL_Texture *leftMessage = NULL;
+SDL_Texture *rightMessage = NULL;
+SDL_Texture *message = NULL;
+
+SDL_Texture *buttonSheet = NULL;
 
 //The event structure
 SDL_Event event;
@@ -34,36 +40,32 @@ SDL_Color textColor = { 255, 255, 255 };
 //Make the button
 Button mainButton( 170, 120, 320, 240 );
 
-SDL_Surface *load_image( std::string filename )
+SDL_Texture *load_image(string filename)
 {
     //The image that's loaded
-    SDL_Surface* loadedImage = NULL;
-
-    //The optimized surface that will be used
-    SDL_Surface* optimizedImage = NULL;
+    SDL_Surface *loadedImage = NULL;
 
     //Load the image
     loadedImage = IMG_Load( filename.c_str() );
 
-    //If the image loaded
-    if( loadedImage != NULL )
-    {
-        //Create an optimized surface
-        optimizedImage = SDL_DisplayFormat( loadedImage );
+    SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, loadedImage);
+    SDL_FreeSurface(loadedImage);
+    return texture;
+}
 
-        //Free the old surface
-        SDL_FreeSurface( loadedImage );
+SDL_Texture *textToTexture(string text) {
+    SDL_Surface *surface = TTF_RenderText_Solid(font, text.c_str(), textColor);
+    SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_FreeSurface(surface);
+    return texture;
+}
 
-        //If the surface was optimized
-        if( optimizedImage != NULL )
-        {
-            //Color key surface
-            SDL_SetColorKey( optimizedImage, SDL_SRCCOLORKEY, SDL_MapRGB( optimizedImage->format, 0, 0xFF, 0xFF ) );
-        }
-    }
+void apply_texture(SDL_Texture *texture, SDL_Rect *srcRect, SDL_Rect *destRect) {
+    SDL_RenderCopy(renderer, texture, srcRect, destRect);
+}
 
-    //Return the optimized surface
-    return optimizedImage;
+void apply_texture(SDL_Texture *texture) {
+    SDL_RenderCopy(renderer, texture, NULL, NULL);
 }
 
 void apply_surface( int x, int y, SDL_Surface* source, SDL_Surface* destination, SDL_Rect* clip = NULL )
@@ -82,28 +84,29 @@ void apply_surface( int x, int y, SDL_Surface* source, SDL_Surface* destination,
 bool init()
 {
     //Initialize all SDL subsystems
-    if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
-    {
+    if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
         return false;
     }
 
     //Set up the screen
-    screen = SDL_SetVideoMode( SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE );
+    screen = SDL_CreateWindow("Nathaniel",
+            SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+            SCREEN_WIDTH, SCREEN_HEIGHT,
+            SDL_WINDOW_SHOWN | SDL_WINDOW_MAXIMIZED);
+    renderer = SDL_CreateRenderer(screen, -1,
+            SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
     //If there was an error in setting up the screen
-    if( screen == NULL )
-    {
+    if( screen == NULL || renderer == NULL ) {
         return false;
     }
 
     //Initialize SDL_ttf
-    if( TTF_Init() == -1 )
-    {
+    if( TTF_Init() == -1 ) {
         return false;
     }
 
-    //Set the window caption
-    SDL_WM_SetCaption( "Nathaniel", NULL );
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 
     //If everything initialized fine
     return true;
@@ -116,7 +119,7 @@ bool load_files()
     buttonSheet = load_image( DATADIR "/button.png" );
 
     //Open the font
-    font = TTF_OpenFont( DATADIR "/lazy.ttf", 72 );
+    font = TTF_OpenFont( DATADIR "/fonts/lazy.ttf", 72 );
 
     //If there was a problem in loading the background
     if( background == NULL )
@@ -129,7 +132,7 @@ bool load_files()
     {
         return false;
     }
-    
+
     //If there was a problem in loading the button sprite sheet
     if( buttonSheet == NULL )
     {
@@ -140,110 +143,79 @@ bool load_files()
     return true;
 }
 
-void clean_up()
-{
-    //Free the surfaces
-    SDL_FreeSurface( background );
-    SDL_FreeSurface( upMessage );
-    SDL_FreeSurface( downMessage );
-    SDL_FreeSurface( leftMessage );
-    SDL_FreeSurface( rightMessage );
-    SDL_FreeSurface( buttonSheet );
+void clean_up() {
+    SDL_DestroyTexture(background);
+    SDL_DestroyTexture(upMessage);
+    SDL_DestroyTexture(downMessage);
+    SDL_DestroyTexture(leftMessage);
+    SDL_DestroyTexture(rightMessage);
+    SDL_DestroyTexture(buttonSheet);
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(screen);
 
-    //Close the font
-    TTF_CloseFont( font );
-
-    //Quit SDL_ttf
+    TTF_CloseFont(font);
     TTF_Quit();
 
-    //Quit SDL
     SDL_Quit();
 }
 
-int main( int argc, char* args[] )
-{
-    //Quit flag
+int main(int argc, char* argv[]) {
+
     bool quit = false;
+    SDL_Rect srcRect, destRect;
+    srcRect.x = 0;
+    srcRect.y = 0;
+    srcRect.w = SCREEN_WIDTH;
+    srcRect.h = SCREEN_HEIGHT;
+    destRect.x = 20;
+    destRect.y = 20;
+    destRect.w = SCREEN_WIDTH;
+    destRect.h = SCREEN_HEIGHT;
 
-    //Initialize
-    if( init() == false )
-    {
+    if(!init())
         return 1;
-    }
 
-    //Load the files
-    if( load_files() == false )
-    {
+    if(!load_files())
         return 1;
-    }
+
+    atexit(clean_up);
 
     //Generate the message surfaces
-    upMessage = TTF_RenderText_Solid( font, "Up was pressed.", textColor );
-    downMessage = TTF_RenderText_Solid( font, "Down was pressed.", textColor );
-    leftMessage = TTF_RenderText_Solid( font, "Left was pressed", textColor );
-    rightMessage = TTF_RenderText_Solid( font, "Right was pressed", textColor );
+    upMessage = textToTexture("Up was pressed.");
+    downMessage = textToTexture("Down was pressed.");
+    leftMessage = textToTexture("Left was pressed.");
+    rightMessage = textToTexture("Right was pressed.");
 
     //Apply the background
-    apply_surface( 0, 0, background, screen );
-    
+    SDL_RenderClear(renderer);
+    apply_texture(background);
+    SDL_RenderPresent(renderer);
+
     //Clip the sprite sheet
     mainButton.set_clips();    
 
-    //While the user hasn't quit
-    while( quit == false )
-    {
-        //If there's an event to handle
-        if( SDL_PollEvent( &event ) )
-        {
-			mainButton.handle_events(event);
-            //If a key was pressed
-            if( event.type == SDL_KEYDOWN )
-            {
-                //Set the proper message surface
-                switch( event.key.keysym.sym )
-                {
+    while (!quit) {
+        if (SDL_WaitEvent(&event)) {
+            mainButton.handle_events(event);
+            if (event.type == SDL_KEYDOWN) {
+                switch (event.key.keysym.sym) {
                     case SDLK_UP: message = upMessage; break;
                     case SDLK_DOWN: message = downMessage; break;
                     case SDLK_LEFT: message = leftMessage; break;
                     case SDLK_RIGHT: message = rightMessage; break;
                 }
             }
-
-            //If the user has Xed out the window
-            else if( event.type == SDL_QUIT )
-            {
-                //Quit the program
+            else if (event.type == SDL_QUIT) {
                 quit = true;
             }
         }
 
-        //If a message needs to be displayed
-        if( message != NULL )
-        {
-            //Apply the background to the screen
-            apply_surface( 0, 0, background, screen );
-
-            //Apply the message centered on the screen
-            apply_surface( ( SCREEN_WIDTH - message->w ) / 2, ( SCREEN_HEIGHT - message->h ) / 6, message, screen );
-
-            //Null the surface pointer
-            message = NULL;
-        }
-        
-        //Fill the screen white
-      //  SDL_FillRect( screen, &screen->clip_rect, SDL_MapRGB( screen->format, 0xFF, 0xFF, 0xFF ) );
-		// Draw Button
-		apply_surface( mainButton.box.x, mainButton.box.y, buttonSheet, screen, mainButton.clip );
-		
-        //Update the screen
-        if( SDL_Flip( screen ) == -1 )
-        {
-            return 1;
-        }
+        SDL_QueryTexture(message, 0, 0, &srcRect.w, &srcRect.h);
+        SDL_RenderClear(renderer);
+        apply_texture(background);
+        apply_texture(message, &srcRect, &srcRect);
+        apply_texture(buttonSheet, mainButton.clip, &mainButton.box);
+        SDL_RenderPresent(renderer);
     }
-
-    //Clean up
-    clean_up();
-
     return 0;
 }

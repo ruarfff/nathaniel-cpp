@@ -4,23 +4,18 @@
 AC_PREREQ([2.69])
 AC_INIT([Nathaniel], [1.0], [ruairitobrien@gmail.com])
 
-AM_INIT_AUTOMAKE([foreign])
+AM_INIT_AUTOMAKE([subdir-objects foreign])
 
 AC_CONFIG_SRCDIR([src])
 AC_CONFIG_HEADERS([config.h])
 
 # Checks for programs.
-AC_PROG_CC
-AC_PROG_CXX
+AX_CXX_COMPILE_STDCXX_11
 
 # Checks for libraries.
-AC_CHECK_LIB([SDL], [SDL_SetVideoMode])
-AC_CHECK_LIB([SDL_image], [IMG_Load])
-AC_CHECK_LIB([SDL_ttf], [TTF_RenderText_Solid])
-AC_CHECK_LIB([GL], [glPushMatrix])
-AC_CHECK_LIB([GLU], [gluLookAt])
-AC_CHECK_LIB([glut], [glutPostRedisplay])
-AC_CHECK_LIB([m], [pow])
+AC_CHECK_LIB([SDL2], [SDL_CreateTexture])
+AC_CHECK_LIB([SDL2_image], [IMG_Load])
+AC_CHECK_LIB([SDL2_ttf], [TTF_RenderText_Solid])
 
 # Checks for header files.
 AC_CHECK_HEADERS([stdlib.h])

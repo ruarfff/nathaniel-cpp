@@ -99,7 +99,7 @@ void Button::set_clips()
     clips[ CLIP_MOUSEUP ].h = 240;
 }
 
-void Button::show(SDL_Surface *buttonSheet, SDL_Surface *screen)
+void Button::show(SDL_Texture *buttonSheet, SDL_Renderer *renderer)
 {
     //Show the button
     // TODO - implement outside of nathaniel.cc

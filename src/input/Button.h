@@ -1,8 +1,8 @@
 #ifndef _BUTTON_H
 #define _BUTTON_H
 
-#include "SDL/SDL.h"
-#include "SDL/SDL_image.h"
+#include "SDL2/SDL.h"
+#include "SDL2/SDL_image.h"
 #include <string>
 
 //The button states in the sprite sheet
@@ -36,7 +36,7 @@ class Button
 	void set_clips();
     
     //Shows the button on the screen
-    void show(SDL_Surface *buttonSheet, SDL_Surface *screen);
+    void show(SDL_Texture *buttonSheet, SDL_Renderer *renderer);
 
 };
 

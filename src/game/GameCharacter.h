@@ -1,7 +1,7 @@
 #ifndef _GAMECHARACTER_H
 #define _GAMECHARACTER_H
 
-#include "SDL/SDL.h"
+#include "SDL2/SDL.h"
 
 class GameCharacter
 {
