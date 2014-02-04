@@ -1,12 +1,16 @@
 #include <iostream>
 #include <string>
+#include <libintl.h>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 
+#include "config.h"
 #include "Button.h"
 #include "GameCharacter.h"
+
+#define _(STRING) gettext(STRING)
 
 using namespace std;
 
@@ -89,7 +93,7 @@ bool init()
     }
 
     //Set up the screen
-    screen = SDL_CreateWindow("Nathaniel",
+    screen = SDL_CreateWindow(_("Nathaniel"),
             SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
             SCREEN_WIDTH, SCREEN_HEIGHT,
             SDL_WINDOW_SHOWN | SDL_WINDOW_MAXIMIZED);
@@ -161,6 +165,10 @@ void clean_up() {
 
 int main(int argc, char* argv[]) {
 
+    setlocale(LC_ALL, "");
+    bindtextdomain(PACKAGE, LOCALEDIR);
+    textdomain(PACKAGE);
+
     bool quit = false;
     SDL_Rect srcRect, destRect;
     srcRect.x = 0;
@@ -181,10 +189,10 @@ int main(int argc, char* argv[]) {
     atexit(clean_up);
 
     //Generate the message surfaces
-    upMessage = textToTexture("Up was pressed.");
-    downMessage = textToTexture("Down was pressed.");
-    leftMessage = textToTexture("Left was pressed.");
-    rightMessage = textToTexture("Right was pressed.");
+    upMessage = textToTexture(_("Up was pressed."));
+    downMessage = textToTexture(_("Down was pressed."));
+    leftMessage = textToTexture(_("Left was pressed."));
+    rightMessage = textToTexture(_("Right was pressed."));
 
     //Apply the background
     SDL_RenderClear(renderer);

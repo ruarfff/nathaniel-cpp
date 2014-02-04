@@ -19,6 +19,7 @@ AC_CHECK_LIB([SDL2_ttf], [TTF_RenderText_Solid])
 
 # Checks for header files.
 AC_CHECK_HEADERS([stdlib.h])
+AC_CHECK_HEADERS([libintl.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_CHECK_HEADER_STDBOOL
