@@ -1,7 +1,11 @@
 #include "Button.h"
 
-Button::Button( int x, int y, int w, int h )
-{
+using namespace std;
+
+Button::Button(SDL_Renderer *renderer, string spritesheet_file,
+        int x, int y, int w, int h) {
+    spritesheet = load_image_from_file(renderer, spritesheet_file);
+
     //Set the button's attributes
     box.x = x;
     box.y = y;
@@ -9,10 +13,15 @@ Button::Button( int x, int y, int w, int h )
     box.h = h;
 
     //Set the default sprite
-    clip = &clips[ CLIP_MOUSEOUT ];
+    setClips();
+    currentClip = &clips[ CLIP_MOUSEOUT ];
 }
 
-void Button::handle_events(SDL_Event event)
+Button::~Button() {
+    SDL_DestroyTexture(spritesheet);
+}
+
+void Button::handleEvents(SDL_Event event)
 {
     //The mouse offsets
     int x = 0, y = 0;
@@ -28,13 +37,13 @@ void Button::handle_events(SDL_Event event)
         if( ( x > box.x ) && ( x < box.x + box.w ) && ( y > box.y ) && ( y < box.y + box.h ) )
         {
             //Set the button sprite
-            clip = &clips[ CLIP_MOUSEOVER ];
+            currentClip = &clips[ CLIP_MOUSEOVER ];
         }
         //If not
         else
         {
             //Set the button sprite
-            clip = &clips[ CLIP_MOUSEOUT ];
+            currentClip = &clips[ CLIP_MOUSEOUT ];
         }
     }
     //If a mouse button was pressed
@@ -51,7 +60,7 @@ void Button::handle_events(SDL_Event event)
             if( ( x > box.x ) && ( x < box.x + box.w ) && ( y > box.y ) && ( y < box.y + box.h ) )
             {
                 //Set the button sprite
-                clip = &clips[ CLIP_MOUSEDOWN ];
+                currentClip = &clips[ CLIP_MOUSEDOWN ];
             }
         }
     }
@@ -69,13 +78,13 @@ void Button::handle_events(SDL_Event event)
             if( ( x > box.x ) && ( x < box.x + box.w ) && ( y > box.y ) && ( y < box.y + box.h ) )
             {
                 //Set the button sprite
-                clip = &clips[ CLIP_MOUSEUP ];
+                currentClip = &clips[ CLIP_MOUSEUP ];
             }
         }
     }
 }
 
-void Button::set_clips()
+void Button::setClips()
 {
     //Clip the sprite sheet
     clips[ CLIP_MOUSEOVER ].x = 0;
@@ -99,8 +108,6 @@ void Button::set_clips()
     clips[ CLIP_MOUSEUP ].h = 240;
 }
 
-void Button::show(SDL_Texture *buttonSheet, SDL_Renderer *renderer)
-{
-    //Show the button
-    // TODO - implement outside of nathaniel.cc
+void Button::show(SDL_Renderer *renderer) {
+    apply_texture(renderer, spritesheet, currentClip, &box);
 }

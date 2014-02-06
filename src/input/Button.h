@@ -5,6 +5,8 @@
 #include "SDL2/SDL_image.h"
 #include <string>
 
+#include "ResourceManager.h"
+
 //The button states in the sprite sheet
 const int CLIP_MOUSEOVER = 0;
 const int CLIP_MOUSEOUT = 1;
@@ -12,31 +14,21 @@ const int CLIP_MOUSEDOWN = 2;
 const int CLIP_MOUSEUP = 3;
 
 	
-class Button
-{
-	private:
+class Button {
+    private:
+        SDL_Texture *spritesheet;
+        SDL_Rect box;
+        SDL_Rect clips[4];
+        SDL_Rect* currentClip;
 
+        void setClips();
 
     public:
-    //Initialize the variables
-    Button( int x, int y, int w, int h );
-
-    //The attributes of the button
-    SDL_Rect box;
-    
-    //The part of the button sprite sheet that will be shown
-    SDL_Rect* clip;
-    
-    //The clip regions of the sprite sheet
-	SDL_Rect clips[ 4 ];
-    
-    //Handles events and set the button's sprite region
-    void handle_events(SDL_Event event);
-
-	void set_clips();
-    
-    //Shows the button on the screen
-    void show(SDL_Texture *buttonSheet, SDL_Renderer *renderer);
+        Button(SDL_Renderer *renderer, std::string spritesheet_file,
+                int x, int y, int w, int h);
+        ~Button();
+        void handleEvents(SDL_Event event);
+        void show(SDL_Renderer *renderer);
 
 };
 
