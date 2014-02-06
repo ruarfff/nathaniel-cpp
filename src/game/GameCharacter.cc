@@ -26,10 +26,18 @@ void GameCharacter::handleEvents(SDL_Event event) {
                 move((direction + 4) % 8);
                 break;
             case SDLK_LEFT:
-                direction = (direction + 7) % 8;
+                direction = Direction((direction + 7) % 8);
                 break;
             case SDLK_RIGHT:
-                ++direction %= 8;
+                direction = Direction((direction + 1) % 8);
+                break;
+        }
+    }
+    else if (event.type == SDL_KEYUP) {
+        switch (event.key.keysym.sym) {
+            case SDLK_UP:
+            case SDLK_DOWN:
+                velocity = 0;
                 break;
         }
     }

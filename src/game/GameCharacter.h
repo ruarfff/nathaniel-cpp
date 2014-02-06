@@ -11,14 +11,8 @@ using namespace std;
 
 class GameCharacter {
     private:
-        static const int SOUTH = 0;
-        static const int SOUTH_WEST = 1;
-        static const int WEST = 2;
-        static const int NORTH_WEST = 3;
-        static const int NORTH = 4;
-        static const int NORTH_EAST = 5;
-        static const int EAST = 6;
-        static const int SOUTH_EAST = 7;
+        enum Direction { SOUTH, SOUTH_WEST, WEST, NORTH_WEST, NORTH, NORTH_EAST,
+            EAST, SOUTH_EAST };
 
         static const int STEP_SIZE = 10;
         static const int SHEET_HEIGHT = 70;
@@ -30,7 +24,7 @@ class GameCharacter {
         int velocity;
         int frame;
         int status;
-        int direction;
+        Direction direction;
 
         SDL_Texture *spritesheet;
         SDL_Rect box;
